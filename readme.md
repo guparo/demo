@@ -1,4 +1,8 @@
 pip install django
+pip install reportlab
+
+pip install tensorflow
+pillow
 
 
 
@@ -10,7 +14,6 @@ Django CRUD (Create, Retrieve, Update, Delete)
 
 https://wsvincent.com/django-user-authentication-tutorial-login-and-logout/
 Django Login/Logout Tutorial
-
 
 https://garethmoger.com/blog/post/14/django-contact-page-bootstrap
 Django contact page with Bootstrap

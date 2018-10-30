@@ -1,16 +1,32 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Book, Contact, Passenger
-from django.urls import reverse_lazy
-from .forms import ContactForm
 
+from .render import Render
+from django.utils import timezone
+from django.conf import settings
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from django.views.generic import View
+from django.db.models import Count, Q
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from books.models import Book, Contact
+from .models import Passenger
+from .forms import ContactForm
 
-from django.db.models import Count, Q
+class bookPdf(View):
 
+    def get(self, request):
+        book = Book.objects.all()
+
+        today = timezone.now()
+        params = {
+            'today': today,
+            'book': book,
+            'request': request
+        }
+        return Render.render('books/book_pdf.html', params)
 
 def chart(request):
     dataset = Passenger.objects \
@@ -19,6 +35,7 @@ def chart(request):
                   not_survived_count=Count('ticket_class', filter=Q(survived=False))) \
         .order_by('ticket_class')
     return render(request, 'chart/chart.html', {'dataset': dataset})
+
 
 class BookList(ListView):
     model = Book
